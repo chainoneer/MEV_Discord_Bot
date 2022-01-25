@@ -35,6 +35,8 @@ async def on_message(message):
     return
   if message.content.startswith('$hello'):
     await message.channel.send('```Hello {}```'.format(message.author.name))
+  if message.content.startswith('$sussy'):
+    await message.channel.send("<:sussy:935624898511011930>")
   if message.content.startswith('$startnew'):
     new_user = False
     for k in db.keys():
@@ -54,6 +56,13 @@ async def on_message(message):
   if message.content.startswith('$reset'):
     del db[str(message.author)]
     print(db.keys())
+
+  if message.content.startswith('$embed'):
+    embedVar = discord.Embed(title="Title", description="Desc", color=0x00ff00)
+    embedVar.add_field(name="Field1", value="hi", inline=False)
+    embedVar.add_field(name="Field2", value="hi2", inline=False)
+    embedVar.set_image(url="https://www.looper.com/img/gallery/valorant-release-date-platforms-trailer-and-gameplay/intro-1591383833.jpg")
+    await message.channel.send(embed=embedVar)
   
   
 
