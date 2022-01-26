@@ -55,5 +55,7 @@ async def on_message(message):
 load_dotenv()
 
 # keep_alive()
+
+# Get token from .env
 my_secret = os.getenv('TOKEN')
 client.run(my_secret)
