@@ -1,4 +1,5 @@
 import os
+from discord.ext import tasks
 import discord
 import re
 import asyncio
@@ -18,27 +19,31 @@ except:
 
 client = discord.Client()
 
-
-
 @client.event
 async def on_ready():
   print('We have logged in as {0.user}'.format(client))
+
+'''
+@tasks.loop(seconds=5)# 1 day
+async def mytask(message):
+ await message.channel.send("```Hello World```")
+'''
 
 @client.event
 async def on_message(message):
   if message.author == client.user:
     return
   if message.content.startswith('$hello'):
-    '''
-    f = open('stats.json', "r")
-    data = json.loads(f.read())
-    print(data)
-    i = data["Users"]
-    for j in i:
-      print(j["Name"])
-    f.close()
-    '''
     await message.channel.send('```Hello {}```'.format(message.author.name))
+  if message.content.startswith('$timer'):
+    start_time = time.time()
+    seconds = 5
+    while True:
+      current_time=time.time()
+      elapsed_time=current_time - start_time
+      if elapsed_time > seconds:
+        break
+    await message.channel.send('```5 second timer expired```')
   if message.content.startswith('$sussy'):
     await message.channel.send("<:sussy:935624898511011930>")
   if message.content.startswith('$startnew'):
@@ -100,6 +105,18 @@ def write_json(new_data, filename='stats.json'):
         # convert back to json.
         json.dump(file_data, file, indent = 4)
 
+
 keep_alive()
 my_secret = os.environ['TOKEN']
 client.run(my_secret)
+
+
+'''
+    f = open('stats.json', "r")
+    data = json.loads(f.read())
+    print(data)
+    i = data["Users"]
+    for j in i:
+      print(j["Name"])
+    f.close()
+    '''
