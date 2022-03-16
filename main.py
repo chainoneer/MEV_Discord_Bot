@@ -1,14 +1,15 @@
 import os
 from discord.ext import tasks
 import discord
+from discord.ext import commands
+from dotenv import load_dotenv
 import re
 import asyncio
 import json
 import time
 import logging
 import threading 
-from replit import db
-from keep_alive import keep_alive
+# from keep_alive import keep_alive
 
 
 try:
@@ -17,11 +18,12 @@ except:
     os.system("pip install git+https://github.com/Merubokkusu/Discord-S.C.U.M.git#egg=discum")
     import discum
 
-client = discord.Client()
+client = commands.Bot(command_prefix="!", case_insensitive=True)
 
 @client.event
 async def on_ready():
   print('We have logged in as {0.user}'.format(client))
+  return await client.change_presence(activity=discord.Activity(type=1, name='Vibing'))
 
 '''
 @tasks.loop(seconds=5)# 1 day
@@ -45,8 +47,9 @@ async def on_message(message):
         break
     await message.channel.send('```5 second timer expired```')
   if message.content.startswith('$sussy'):
-    await message.channel.send("<:sussy:935624898511011930>")
+    await message.channel.send("<:sussy:935624408855363666>")
   if message.content.startswith('$startnew'):
+
     new_user = False
     f = open('stats.json', "r")
     data = json.loads(f.read())
@@ -86,6 +89,8 @@ async def on_message(message):
       write_json(new_user)
       
       await message.channel.send('```Welcome to MEV Bot, this is a bot that will allow you to collect different valorant abilities, charms, skins and agents. Since this is your first time you have one free lootbox for an agent and their abilities, 2 charms and a skin. Take part in the casino, complete daily and weekly tasks, random pop questions, and many more to earn more currency to collect them all. If you roll a duplicate use $claim to earn currency. Good luck and enjoy MEV Bot```')
+  if message.content.startswith('$reset'):
+    return
 
   if message.content.startswith('$embed'):
     embedVar = discord.Embed(title="Title", description="Desc", color=0x00ff00)
@@ -106,8 +111,10 @@ def write_json(new_data, filename='stats.json'):
         json.dump(file_data, file, indent = 4)
 
 
+
 keep_alive()
-my_secret = os.environ['TOKEN']
+# Get token from .env
+my_secret = os.getenv('TOKEN')
 client.run(my_secret)
 
 
