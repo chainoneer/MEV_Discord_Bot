@@ -23,7 +23,7 @@ agents = ["Astra", "Breach", "Brimstone", "Chamber", "Cypher", "Jett", "KAY/O",
           "Killjoy", "Neon", "Omen", "Phoenix", "Raze", "Reyna", "Sage", "Skye",
           "Sova", "Viper", "Yoru"]
 
-
+maps = ["Ascent", "Bind", "Breeze", "Fracture", "Haven", "Icebox", "Split"]
 
 emotes = ["<:astra:958420104490663986>","<:breach:958420500839804938>","<:brimstone:958420774736252948>","<:chamber:958421177422983239>","<:cypher:958425821578682378>","<:jett:958426375168073809>","<:kayo:958426726822727711>","<:killjoy:958427157539983440>","<:neon:958427417528131624>","<:omen:958427990029660230>","<:phoenix:958428146330374164>","<:raze:958428251485782046>","<:reyna:958428346428059648>","<:sage:958428493211902003>","<:skye:958428627517730876>","<:sova:958429598989811812>","<:viper:958429995989086238>","<:yoru:958430128977895504>", "<:atk:960403431837802496>","<:def:960367760574128151>"]
 
@@ -102,8 +102,11 @@ async def on_message(message):
           joined = [response,row]
           response = "".join(joined)
           i = i+1
-        
+        num = random.randint(0,6)
+        map = "Map: " + maps[num]
         await message.channel.send(response)
+        await message.channel.send(map)
+        
 
       elif message.content[11] != "c":
         players = int(message.content[11])
@@ -131,7 +134,61 @@ async def on_message(message):
       print("Random Agent")
       response = emotes[random.randint(0,17)]
       await message.channel.send(response)
-  
+
+  if message.content.startswith('$randomteam'):
+    team1Len = 0
+    team2Len = 0
+    if len(message.content)>12:
+      print('hello')
+      names = message.content.split()
+      names.pop(0)
+      teamOne = []
+      teamTwo = []
+      res_t1 = "Team 1\n"
+      res_t2 = "Team 2\n"
+      l = len(names)
+      for i in range(l):
+        if len(names) == 1:
+          num = random.randint(1,10)
+          if num%2==0:
+            teamOne.append(names[0])
+            res1 = names[0] + "\n"
+            joined = [res_t1,res1]
+            res_t1 = "".join(joined)
+          else:
+            teamTwo.append(names[0])
+            res2 = names[0] + "\n"
+            joined = [res_t2,res2]
+            res_t2 = "".join(joined)
+          team1Len=len(teamOne)
+          team2Len=len(teamTwo)
+          break
+        num = random.randint(0,len(names)-1)
+        teamOne.append(names[num])
+        res1 = names[num] + "\n"
+        joined = [res_t1,res1]
+        res_t1 = "".join(joined)
+        names.pop(num)
+        num = random.randint(0,len(names)-1)
+        teamTwo.append(names[num])
+        res2 = names[num] + "\n"
+        joined = [res_t2,res2]
+        res_t2 = "".join(joined)
+        names.pop(num)
+        if len(names) == 0:
+          team1Len=len(teamOne)
+          team2Len=len(teamTwo)
+          break
+      joined = [res_t1,res_t2]
+      response = "\n".join(joined)
+      await message.channel.send(response)
+      
+    else:
+      print('Error')
+    response = '```Use this command to randomize valorant agents: $randomval c ' + str(team1Len) + "v" + str(team2Len) + "```" 
+    await message.channel.send(response)
+
+    
   if message.content.startswith('$embed'):
     embedVar = discord.Embed(title="Title", description="Desc", color=0x00ff00)
     embedVar.add_field(name="Field1", value="hi", inline=False)
