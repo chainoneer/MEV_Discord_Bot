@@ -23,7 +23,9 @@ agents = ["Astra", "Breach", "Brimstone", "Chamber", "Cypher", "Jett", "KAY/O",
           "Killjoy", "Neon", "Omen", "Phoenix", "Raze", "Reyna", "Sage", "Skye",
           "Sova", "Viper", "Yoru"]
 
-emotes = ["<:astra:958420104490663986>","<:breach:958420500839804938>","<:brimstone:958420774736252948>","<:chamber:958421177422983239>","<:cypher:958425821578682378>","<:jett:958426375168073809>","<:kayo:958426726822727711>","<:killjoy:958427157539983440>","<:neon:958427417528131624>","<:omen:958427990029660230>","<:phoenix:958428146330374164>","<:raze:958428251485782046>","<:reyna:958428346428059648>","<:sage:958428493211902003>","<:skye:958428627517730876>","<:sova:958429598989811812>","<:viper:958429995989086238>","<:yoru:958430128977895504>"]
+
+
+emotes = ["<:astra:958420104490663986>","<:breach:958420500839804938>","<:brimstone:958420774736252948>","<:chamber:958421177422983239>","<:cypher:958425821578682378>","<:jett:958426375168073809>","<:kayo:958426726822727711>","<:killjoy:958427157539983440>","<:neon:958427417528131624>","<:omen:958427990029660230>","<:phoenix:958428146330374164>","<:raze:958428251485782046>","<:reyna:958428346428059648>","<:sage:958428493211902003>","<:skye:958428627517730876>","<:sova:958429598989811812>","<:viper:958429995989086238>","<:yoru:958430128977895504>", "<:att:960367760771280896>","<:def:960367760574128151>"]
 
 @client.event
 async def on_ready():
@@ -60,23 +62,75 @@ async def on_message(message):
       if message.content[11] == "c":
         print("Custom Game")
         attside = int(message.content[13])
-        defside = int(message.content[15]) 
-        attackers = []
+        defside = int(message.content[15])
+        attnum = []
+        defnum = []
         emotesatt = []
-        defenders = []
         emotesdef = []
-        for i in range(attside):
-          attackers.append(agents[random.randint(0,17)])
-        for i in range(defside):
-          defenders.append(agents[random.randint(0,17)])
-        response = "Attackers: "+ attackers[0] + 
-        await message.channel.send(response)
+        response = emotes[18] + "   " + emotes[19] + "\n"
+        i = 0
+        while i < attside or i < defside:
+          num = random.randint(0,17)
+          res1 = ""
+          res2 = ""
+          if i < attside:
+            repeat = True
+            while repeat:
+              if num in attnum:
+                num = random.randint(0,17)
+              else:
+                break
+            emotesatt.append(emotes[num])
+            attnum.append(num)
+            res1 = emotesatt[i] + "   "
+          else:
+            res1 = "                "
+          if i < defside:
+            repeat = True
+            num = random.randint(0,17)
+            while repeat:
+              if num in defnum:
+               num = random.randint(0,17)
+              else: 
+               break
+            emotesdef.append(emotes[num])
+            defnum.append(num)
+            res2 = emotesdef[i]
+          res3 = "\n"
+          joined = [res1,res2,res3]
+          row = "".join(joined)
+          joined = [response,row]
+          response = "".join(joined)
+          i = i+1
         
+        await message.channel.send(response)
+
+      elif message.content[11] != "c":
+        players = int(message.content[11])
+        response = ""
+        currentplay = []
+        repeat = True
+        if players>=2 and players<=5:
+          for i in range(players):
+            num = random.randint(0,17)
+            while repeat:
+              if num in currentplay:
+                num = random.randint(0,17)
+              else:
+                break
+            res = emotes[num] + "\n"
+            joined = [response,res]
+            response = "".join(joined)
+            currentplay.append(num)
+          await message.channel.send(response)
+        else:
+          print("Error")
       else:
         print("Error")
     else:
       print("Random Agent")
-    await message.channel.send('```Hello {}```'.format(message.author.name))
+      response = emotes[random.randint(0,17)]
+      await message.channel.send(response)
   
   if message.content.startswith('$embed'):
     embedVar = discord.Embed(title="Title", description="Desc", color=0x00ff00)
